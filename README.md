@@ -7,8 +7,9 @@ A mulltiple players online platform for 2048
 * Make sure you have [node.js](http://nodejs.org/) installed and [redis](http://redis.io/) running at your local machine with port 6379.
 
 ```sh
-git clone https://github.com/folkite/2048.git
-cd 2048 && npm install
+git clone https://github.com/foolkite/2048.git
+cd 2048
+npm install
 node app.js
 ```
 
