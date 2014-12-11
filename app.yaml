@@ -1,0 +1,5 @@
+appid: 11170
+install: [node]
+setenv: {'ip':'10.16.16.16','port':1053,'token':'757fd1624be45854fb8ffc99fdae2e75'}
+start: $NODEJS $USER_DIR/app/index.js
+webHealth: true

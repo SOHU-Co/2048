@@ -3,7 +3,7 @@ function GameManager(size, InputManager, Actuator, StorageManager, Tunnel) {
   this.inputManager   = new InputManager;
   this.storageManager = new StorageManager;
   this.actuator       = new Actuator;
-  this.tunnel = new Tunnel();
+  // this.tunnel = new Tunnel();
   var options = {
     topics: 'test,login,move,emoji,comment',
     token: '1dea5f3bbbe158091ec27c1d88945b36',
@@ -84,7 +84,7 @@ GameManager.prototype.setup = function () {
   this.actuate();
 
   // Setup tunnel
-  this.tunnel.setup();
+  // this.tunnel.setup();
 
 };
 
@@ -117,11 +117,11 @@ GameManager.prototype.actuate = function (direction, tile) {
   var gameState = this.serialize();
   if (this.over) {
     this.storageManager.clearGameState();
-    this.tunnel.move({ direction: direction, gameState: gameState, tile: tile });
+    // this.tunnel.move({ direction: direction, gameState: gameState, tile: tile });
     var moveMSG = JSON.stringify({move:{ direction: direction, gameState: gameState, tile: tile, uid:this.uid, username:this.username }});
     this.channel.send(moveMSG);
   } else {
-    this.tunnel.move({ direction: direction, gameState: gameState, tile: tile });
+    // this.tunnel.move({ direction: direction, gameState: gameState, tile: tile });
     var moveMSG = JSON.stringify({move:{ direction: direction, gameState: gameState, tile: tile, uid:this.uid, username:this.username }});
     this.channel.send(moveMSG);
     this.storageManager.setGameState(gameState);
