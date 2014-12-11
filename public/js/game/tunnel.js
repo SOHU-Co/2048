@@ -9,7 +9,7 @@ Tunnel.prototype.setup = function () {
     var socket = this.socket  = io();
     document.querySelector('.title').innerText = decodeURI(username);
     socket.on('connect', function () {
-        console.log('Hey, you are connecting now!');
+        console.log('socket tunnel connecting now!');
         socket.emit('login', uid);
     });
     socket.on('start game', function () {})
@@ -17,5 +17,5 @@ Tunnel.prototype.setup = function () {
 
 Tunnel.prototype.move = function (action) {
     this.socket.emit('move', action);
-    console.log('Client moveing', action);
+    console.log('socket moveing', action);
 }

@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>演示</title>
+  <link href="css/font-awesome.min.css" rel="stylesheet" type="text/css">
+  <link href="css/demo.css" rel="stylesheet" type="text/css">
+  <link rel="shortcut icon" href="favicon.ico">
+  <link rel="apple-touch-icon" href="img/apple-touch-icon.png">
+  <link rel="apple-touch-startup-image" href="img/apple-touch-startup-image-640x1096.png" media="(device-width: 320px) and (device-height: 568px) and (-webkit-device-pixel-ratio: 2)"> <!-- iPhone 5+ -->
+  <link rel="apple-touch-startup-image" href="img/apple-touch-startup-image-640x920.png"  media="(device-width: 320px) and (device-height: 480px) and (-webkit-device-pixel-ratio: 2)"> <!-- iPhone, retina -->
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, target-densitydpi=160dpi, initial-scale=1.0, maximum-scale=1, user-scalable=no, minimal-ui">
+</head>
+<body>
+  <div id="comment">
+    <div class="comment">
+      初 始 化 ...
+    </div>
+  </div>
+
+  <div class="affix-container">
+    <a href="#qrcode" class="qrcode lightbox">
+      <img src="img/qrcode.png">
+    </a>
+    <div class="affix-header">
+      排行榜
+    </div>
+    <div id="board" class="affix">
+    </div>
+    <div id="arrow" class="arrow-up">
+    </div>
+  </div>
+
+  <div class="article">
+    <div class="container">
+    </div>
+  </div>
+  
+  <div class="lightbox-target" id="qrcode">
+    <img src="img/qrcode.png"/>
+    <a class="lightbox-close" href="#"></a>
+  </div>
+
+  <script src="js/demo/bind_polyfill.js"></script>
+  <script src="js/demo/classlist_polyfill.js"></script>
+  <script src="js/demo/animframe_polyfill.js"></script>
+  <script src="js/demo/html_actuator.js"></script>
+  <script src="js/demo/grid.js"></script>
+  <script src="js/demo/tile.js"></script>
+  <script src="js/demo/local_storage_manager.js"></script>
+  <script src="js/demo/game_manager.js"></script>
+  <script src="js/demo/application.js"></script>
+  <script src="/socket.io/socket.io.js"></script>
+  <script src="js/channel.min.js"></script>
+  <script src="js/demo/demo.js"></script>
+</body>
+</html>

@@ -1,32 +1,16 @@
-function GameManager(size, InputManager, Actuator, StorageManager, Tunnel) {
+function GameManager(uid, size, Actuator, StorageManager) {
   this.size           = size; // Size of the grid
-  this.inputManager   = new InputManager;
-  this.storageManager = new StorageManager;
-  this.actuator       = new Actuator;
-  this.tunnel = new Tunnel();
-  var options = {
-    topics: 'test,login,move,emoji,comment',
-    token: '1dea5f3bbbe158091ec27c1d88945b36',
-    timestamp: '1418277755357',
-    appid: "1e9us3io0n"
-  };
-  this.channel = new Channel(options);
- 
+  // this.inputManager   = new InputManager;
+  this.actuator       = new Actuator('#id' + uid);
+  this.storageManager = new StorageManager(uid);
 
   this.startTiles     = 2;
 
-  this.inputManager.on("move", this.move.bind(this));
-  this.inputManager.on("restart", this.restart.bind(this));
-  this.inputManager.on("keepPlaying", this.keepPlaying.bind(this));
+  // this.inputManager.on("move", this.move.bind(this));
+  // this.inputManager.on("restart", this.restart.bind(this));
+  // this.inputManager.on("keepPlaying", this.keepPlaying.bind(this));
 
   this.setup();
-
-  this.channel.onopen = function () { 
-    console.log('channel game connecting now!');
-  };
-  this.channel.onerror = function (err) { console.log(err)};
-  this.channel.onclose = function (reason) { };
-
 }
 
 // Restart the game
@@ -67,24 +51,11 @@ GameManager.prototype.setup = function () {
     this.keepPlaying = false;
 
     // Add the initial tiles
-    this.addStartTiles();
+    // this.addStartTiles();
   }
-
-
-  var username = window.location.href.match(/.+username=(.+)/) && window.location.href.match(/.+username=(.+)/)[1];
-  var uid = window.location.href.match(/.+uid=(.+)&/) && window.location.href.match(/.+uid=(.+)&/)[1];
-  document.querySelector('.title').innerText = decodeURI(username);
-  var loginMSG = JSON.stringify({login: uid});
-  console.log('login', loginMSG)
-  this.channel.send(loginMSG);
-  this.uid = uid;
-  this.username = username;
 
   // Update the actuator
   this.actuate();
-
-  // Setup tunnel
-  this.tunnel.setup();
 
 };
 
@@ -96,34 +67,25 @@ GameManager.prototype.addStartTiles = function () {
 };
 
 // Adds a tile in a random position
-GameManager.prototype.addRandomTile = function () {
+GameManager.prototype.addRandomTile = function (tile) {
   if (this.grid.cellsAvailable()) {
-    var value = Math.random() < 0.9 ? 2 : 4;
-    var cell = this.grid.randomAvailableCell();
-    var tile = new Tile(cell, value);
-    console.log(value, cell)
-    this.grid.insertTile(tile);
-    return { cell: cell, value: value };
+    // var value = Math.random() < 0.9 ? 2 : 4;
+    // var tile = new Tile(this.grid.randomAvailableCell(), value);
+    this.grid.insertTile(new Tile(tile.cell, tile.value));
   }
 };
 
 // Sends the updated grid to the actuator
-GameManager.prototype.actuate = function (direction, tile) {
+GameManager.prototype.actuate = function (direction) {
   if (this.storageManager.getBestScore() < this.score) {
     this.storageManager.setBestScore(this.score);
   }
 
   // Clear the state when the game is over (game over only, not win)
-  var gameState = this.serialize();
   if (this.over) {
     this.storageManager.clearGameState();
-    this.tunnel.move({ direction: direction, gameState: gameState, tile: tile });
-    var moveMSG = JSON.stringify({move:{ direction: direction, gameState: gameState, tile: tile, uid:this.uid, username:this.username }});
-    this.channel.send(moveMSG);
   } else {
-    this.tunnel.move({ direction: direction, gameState: gameState, tile: tile });
-    var moveMSG = JSON.stringify({move:{ direction: direction, gameState: gameState, tile: tile, uid:this.uid, username:this.username }});
-    this.channel.send(moveMSG);
+    var gameState = this.serialize();
     this.storageManager.setGameState(gameState);
   }
 
@@ -166,7 +128,8 @@ GameManager.prototype.moveTile = function (tile, cell) {
 };
 
 // Move tiles on the grid in the specified direction
-GameManager.prototype.move = function (direction) {
+GameManager.prototype.move = function (direction, _tile) {
+  console.log('GameManager moving.....', direction)
   // 0: up, 1: right, 2: down, 3: left
   var self = this;
 
@@ -219,13 +182,13 @@ GameManager.prototype.move = function (direction) {
   });
 
   if (moved) {
-    var tile = this.addRandomTile();
+    this.addRandomTile(_tile);
 
     if (!this.movesAvailable()) {
       this.over = true; // Game over!
     }
 
-    this.actuate(direction, tile);
+    this.actuate(direction);
   }
 };
 

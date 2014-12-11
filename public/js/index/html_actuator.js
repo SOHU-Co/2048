@@ -4,7 +4,8 @@ function HTMLActuator(ns) {
   this.scoreContainer   = document.querySelector(ns + " .score-container");
   this.bestContainer    = document.querySelector(ns + " .best-container");
   this.messageContainer = document.querySelector(ns + " .game-message");
-  // console.log(this.tileContainer, this.scoreContainer, this.bestContainer, this.messageContainer)
+  console.log(this.tileContainer, this.scoreContainer, this.bestContainer, this.messageContainer)
+
   this.score = 0;
 }
 

@@ -39,93 +39,21 @@ function rankScores (action) {
 window.requestAnimationFrame(function () {
   var managers = {};
   // var gameManager = new GameManager('uid', 4, HTMLActuator, LocalStorageManager);
-  
-  channel.onmessage = function (msg) {
-    console.log(msg);
-    if(msg.topic == 'login') {
-      var uid = JSON.parse(msg.data)['login'];
-      if (managers[uid]) return;
-      newGame(uid);
-      managers[uid] = new GameManager(uid, 4, HTMLActuator, LocalStorageManager);
-    } 
-    else if (msg.topic == 'move') {
-      var action = JSON.parse(msg.data)['move'];
-      console.log('action', action)
-      action.username = decodeURI(action.username);
-      rankScores(action);
-      var gameManager = managers[action.uid];
-      console.log('gameManager', gameManager)
-      if (!gameManager) return;
-      if (action.direction !== undefined) {
-        gameManager.move(action.direction, action.tile);
-        gameManager.storageManager.setGameState(action.gameState);
-      } else {
-        var gameover = document.querySelector('#id' + action.uid + ' .game-over');
-        if (gameover) gameover.style.display = 'none';
-        gameManager.storageManager.setGameState(action.gameState);
-        gameManager.setup();
-      }
-    }
-    else if (msg.topic == 'emoji') {
-      var emoji = JSON.parse(msg.data);
-      var container = document.getElementById("id" + emoji.uid);
-      var comment = document.createElement("div");
-      comment.classList.add("emoji");
-      var img = document.createElement("img");
-      img.setAttribute("src", 'img/emoji/' + emoji.mo + '.png');
-      comment.appendChild(img);
-      if (container.children[2] != undefined) {
-        container.replaceChild( comment , container.children[2]);
-      } else {
-        container.appendChild(comment);
-      }
-    }
-    else if (msg.topic == 'comment') {
-      var comment = JSON.parse(msg.data);
-      var container = document.getElementById("comment");
-      if ( container.childElementCount == 5 ) {
-        while (container.firstChild) {
-          container.removeChild(container.firstChild);
-        }    
-      }
-      var div = document.createElement("div");
-      div.classList.add("comment");
-      div.textContent = comment.alias + ": " + comment.comment;
-      div.style.right = (Math.random()*25-25) + "%" ;
-      div.style.bottom = (Math.random()*50 ) + "%" ;
-      container.appendChild(div);
-    }
-  };
-  
-});
-
-function newGame (uid) {
-  var container = document.querySelector(".container");
-  var gameDiv = document.createElement('div');
-  gameDiv.id = 'id' + uid;
-  gameDiv.className = 'game-set-container';
-  gameDiv.innerHTML = html;
-  container.appendChild(gameDiv); 
-}
-
-function socketTunnel (){
   var socket = this.socket  = io({ query: { dashboard: true } });
-
+  
   socket.on('connect', function () {
-    console.log('Dashboard socketio has connected now!');
+    console.log('Dashboard has connected now!');
   });
   socket.on('error', function (err) {
     console.log(err);
   });
   socket.on('login', function (uid) {
-    console.log('uid:',uid)
     if (managers[uid]) return;
     newGame(uid);
     managers[uid] = new GameManager(uid, 4, HTMLActuator, LocalStorageManager);
   });
   socket.on('move', function (action) {
     rankScores(action);
-    console.log('action:',action)
     var gameManager = managers[action.uid];
     if (!gameManager) return;
     if (action.direction !== undefined) {
@@ -166,6 +94,15 @@ function socketTunnel (){
     div.style.bottom = (Math.random()*50 ) + "%" ;
     container.appendChild(div);
   });
+});
+
+function newGame (uid) {
+  var container = document.querySelector(".container");
+  var gameDiv = document.createElement('div');
+  gameDiv.id = 'id' + uid;
+  gameDiv.className = 'game-set-container';
+  gameDiv.innerHTML = html;
+  container.appendChild(gameDiv); 
 }
 
 var html = [
