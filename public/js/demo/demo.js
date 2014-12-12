@@ -25,3 +25,15 @@ document.getElementById('arrow').onclick = function(event) {
   }
   $expand = !$expand;
 }
+
+document.getElementsByClassName('affix-header')[0].onclick = function(event) {
+  channel.send('click header');
+  if ($expand) {
+    $board.style.height = 0;
+    document.getElementById('arrow').setAttribute('class', 'arrow-down');
+  } else {
+    $board.style.height = '100%';
+    document.getElementById('arrow').setAttribute('class', 'arrow-up');
+  }
+  $expand = !$expand;
+}
